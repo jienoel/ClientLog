@@ -20,7 +20,6 @@ public class TextToFile
 #if UNITY_EDITOR
 		if (sr != null)
 			return;
-		Debug.Log ("3--->colorful:" + colorful);
 		if (debugLog == TextType.Continuours) {
 			FILE_PATH = Application.dataPath + "/../EffectsLog_" + fileName + (colorful ? ".rtf" : ".txt");
 			if (!File.Exists (FILE_PATH)) {

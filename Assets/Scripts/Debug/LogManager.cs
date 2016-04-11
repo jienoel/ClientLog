@@ -19,7 +19,9 @@ public class LogManager : MonoBehaviour
 	public LogType _logType = LogType.Log;
 	public bool resetAtStart = false;
 	public string fileName;
-	public bool colorful;
+	[HideInInspector]
+	public bool
+		colorful = false;  //TODO
 	static int lineNum = 1;
 
 	static Dictionary<LogColor,string> colorMap = new Dictionary<LogColor,string> ();
@@ -33,7 +35,6 @@ public class LogManager : MonoBehaviour
 		logToConsole = _logToConsole;
 		logType = _logType;
 		includeUp = _includeUp;
-		Debug.Log ("1--->colorful:" + colorful);
 		if (resetAtStart)
 			Reset (_debugLog, fileName, colorful);
 	}	
@@ -48,11 +49,12 @@ public class LogManager : MonoBehaviour
 		colorMap.Add (LogColor.purple, "<color=purple>{0}</color>");
 		colorMap.Add (LogColor.orange, "<color=orange>{0}</color>");
 		colorMap.Add (LogColor.cyan, "<color=cyan>{0}</color>");
-		colorMap.Add (LogColor.gray, "<color=gray>{0}</color>");
+		colorMap.Add (LogColor.teal, "<color=teal>{0}</color>");
 		colorMap.Add (LogColor.green, "<color=green>{0}</color>");
 		colorMap.Add (LogColor.grey, "<color=grey>{0}</color>");
 		colorMap.Add (LogColor.magenta, "<color=magenta>{0}</color>");
 		colorMap.Add (LogColor.white, "<color=white>{0}</color>");
+		colorMap.Add (LogColor.maroon, "<color=maroon>{0}</color>");
 	}
 
 	void Update ()
@@ -85,7 +87,6 @@ public class LogManager : MonoBehaviour
 	public static void Reset (TextType debugLog = TextType.None, string fileName = "", bool colorful = false)
 	{
 		if (debugLog != TextType.None) {
-			Debug.Log ("2--->colorful:" + colorful);
 			TextToFile.Reset (debugLog, fileName, colorful);
 		}	
 	}

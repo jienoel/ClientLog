@@ -34,11 +34,13 @@ public enum LogColor
 	purple = 8,
 	orange = 9,
 	cyan = 10,
-	gray = 11,
+	teal = 11,
 	green = 12,
 	grey = 14,
 	magenta = 15,
-	white = 16
+	white = 16,
+	maroon = 17,
+	//for more color , please see http://docs.unity3d.com/Manual/StyledText.html
 }
 
 
