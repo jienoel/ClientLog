@@ -4,21 +4,18 @@ using UnityEngine.UI;
 
 public class DebugTest : MonoBehaviour
 {
-	public Text pathFolder;
 	public Button btnShowLogPath;
+
+	public LogColor logColor;
+	public LogChannel logChannel;
 	public bool printLog;
-	public uint id1;
-	public uint id2;
 	// Use this for initialization
 	void Start ()
 	{
 	
 	}
 
-	public void ShowLogPath ()
-	{
-		pathFolder.text = TextToFile.path;
-	}
+
 
 	public void ResetLogPath ()
 	{
@@ -33,6 +30,7 @@ public class DebugTest : MonoBehaviour
 //			Debug.Log (LogStringUtil.ConvertId2ToString (1, 5));
 //			Debug.Log (LogStringUtil.ConvertId1ToString (2));
 //			Debug.Log (LogStringUtil.ConvertId2ToString (2, 201));
+			LogManager.Log ("test!", logColor, logChannel);
 			printLog = false;
 		}
 	}

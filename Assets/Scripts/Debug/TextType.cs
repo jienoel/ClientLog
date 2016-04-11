@@ -6,9 +6,9 @@ using System.Text;
 
 public enum TextType
 {
-	None,
-	Continuours,
-	Discrete
+	None,  //不写入file
+	Continuours, //写入同一个file中
+	Discrete	//
 }
 
 public enum LogChannel
@@ -24,72 +24,21 @@ public enum LogChannel
 	All = 300,
 }
 
-public class LogString
+public enum LogColor
 {
-
-	public class LogFormat
-	{
-		public int index{ get; set; }
-		public string prefix;
-		public string postfix;
-		public LogChannel channel;
-
-		public LogFormat ()
-		{
-			index = 0;
-			prefix = string.Empty;
-			postfix = string.Empty;
-			channel = LogChannel.Default;
-		}
-
-		public LogFormat (string prefix, string postfix, LogChannel channel = LogChannel.Default)
-		{
-			index = 0;
-			this.prefix = prefix;
-			this.postfix = postfix;
-			this.channel = channel;
-		}
-
-		public string ConcatString (string text)
-		{
-			index++;
-			return string.Format ("{4} -- {0} -- {1}{2}{3}", index, prefix, text, postfix, channel);
-		}
-	}
-
-	public static Dictionary<LogChannel,LogFormat> lineNumbers = new Dictionary<LogChannel, LogFormat> ();
-
-	public static void Reset (bool showInfo = false)
-	{
-		lineNumbers.Clear ();
-		foreach (LogChannel channel in Enum.GetValues(typeof(LogChannel))) {
-			lineNumbers.Add (channel, new LogFormat ());
-		}
-		if (showInfo) {
-			ShowInfo ();
-		}
-	}
-
-	public static void ShowInfo ()
-	{
-		foreach (KeyValuePair<LogChannel,LogFormat> c in lineNumbers) {
-			LogManager.Log (c.Value.ConcatString (c.Key.ToString ()));
-		}
-	}
-
-	public static string ArrayString (ArrayList array, string title, LogChannel channel = LogChannel.Default)
-	{
-		StringBuilder builder = new StringBuilder ();
-		builder.AppendLine ("===============" + title + " count: " + array.Count.ToString () + "  type:" + array.GetType ().ToString () + "  start=================");
-		foreach (var a in array) {
-			Debug.Log (a.ToString ());
-		}
-		builder.AppendLine ("===============" + title + "  end=================End");
-		return builder.ToString ();
-	}
-
-	public static string GetLogString (string text, LogChannel channel = LogChannel.Default)
-	{
-		return	string.Concat (lineNumbers [channel].ConcatString (text));
-	}
+	none = 0,
+	red = 4,
+	blue = 5,
+	yellow = 6,
+	black = 7,
+	purple = 8,
+	orange = 9,
+	cyan = 10,
+	gray = 11,
+	green = 12,
+	grey = 14,
+	magenta = 15,
+	white = 16
 }
+
+

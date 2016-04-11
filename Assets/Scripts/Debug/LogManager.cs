@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class LogManager : MonoBehaviour
 {
@@ -17,20 +18,43 @@ public class LogManager : MonoBehaviour
 	public LogChannel _channel = LogChannel.Default;
 	public LogType _logType = LogType.Log;
 	public bool resetAtStart = false;
-
+	public string fileName;
+	public bool colorful;
 	static int lineNum = 1;
+
+	static Dictionary<LogColor,string> colorMap = new Dictionary<LogColor,string> ();
+
 	void Start ()
 	{
+		AddColorMap ();
 		debugLog = _debugLog;
 		writeToText = _writeToText;
 		channel = _channel;
 		logToConsole = _logToConsole;
 		logType = _logType;
 		includeUp = _includeUp;
+		Debug.Log ("1--->colorful:" + colorful);
 		if (resetAtStart)
-			Reset (_debugLog);
+			Reset (_debugLog, fileName, colorful);
 	}	
-	
+
+
+	void AddColorMap ()
+	{
+		colorMap.Add (LogColor.red, "<color=red>{0}</color>");
+		colorMap.Add (LogColor.blue, "<color=blue>{0}</color>");
+		colorMap.Add (LogColor.yellow, "<color=yellow>{0}</color>");
+		colorMap.Add (LogColor.black, "<color=black>{0}</color>");
+		colorMap.Add (LogColor.purple, "<color=purple>{0}</color>");
+		colorMap.Add (LogColor.orange, "<color=orange>{0}</color>");
+		colorMap.Add (LogColor.cyan, "<color=cyan>{0}</color>");
+		colorMap.Add (LogColor.gray, "<color=gray>{0}</color>");
+		colorMap.Add (LogColor.green, "<color=green>{0}</color>");
+		colorMap.Add (LogColor.grey, "<color=grey>{0}</color>");
+		colorMap.Add (LogColor.magenta, "<color=magenta>{0}</color>");
+		colorMap.Add (LogColor.white, "<color=white>{0}</color>");
+	}
+
 	void Update ()
 	{
 		if (debugLog != _debugLog) {
@@ -58,11 +82,11 @@ public class LogManager : MonoBehaviour
 		}
 	}
 	
-	public static void Reset (TextType debugLog = TextType.None)
+	public static void Reset (TextType debugLog = TextType.None, string fileName = "", bool colorful = false)
 	{
 		if (debugLog != TextType.None) {
-			LogString .Reset ();
-			TextToFile.Reset (debugLog);
+			Debug.Log ("2--->colorful:" + colorful);
+			TextToFile.Reset (debugLog, fileName, colorful);
 		}	
 	}
 
@@ -127,7 +151,27 @@ public class LogManager : MonoBehaviour
 		Log (log, logChannel, includeUp, logType, controlByInside, isWriteToText, isLogToConsole);
 
 	}
+
+	public static void Log (string log, LogColor logColor, LogChannel logChannel = LogChannel.Default)
+	{
+		bool includeUp = false;
+		bool controlByInside = true;
+		bool isWriteToText = true;
+		bool isLogToConsole = false;
 		
+		Log (log, logChannel, includeUp, logType, controlByInside, isWriteToText, isLogToConsole, logColor);
+	}
+
+	public static void Log (string log, LogColor logColor)
+	{
+		bool includeUp = false;
+		bool controlByInside = true;
+		bool isWriteToText = true;
+		bool isLogToConsole = false;
+
+		Log (log, channel, includeUp, logType, controlByInside, isWriteToText, isLogToConsole, logColor);
+	}
+
 	public static void Log (string log, LogType logType)
 	{
 		LogChannel logChannel = LogChannel.Default;
@@ -139,7 +183,7 @@ public class LogManager : MonoBehaviour
 		Log (log, logChannel, includeUp, logType, controlByInside, isWriteToText, isLogToConsole);
 	}
 
-	public static void Log (string log, LogChannel channel, bool includeUp, LogType logType, bool controlByInside, bool isWriteToText, bool isLogToConsole)
+	public static void Log (string log, LogChannel channel, bool includeUp, LogType logType, bool controlByInside, bool isWriteToText, bool isLogToConsole, LogColor logColor = LogColor.none)
 	{
 		
 		if (controlByInside) {
@@ -151,6 +195,8 @@ public class LogManager : MonoBehaviour
 		
 		if (isLogToConsole) {
 			if ((includeUp && ((int)LogManager.channel >= (int)channel)) || LogManager.channel == channel) {
+				if (logColor != LogColor.none)
+					log = string.Format (colorMap [logColor], log);
 				if (logType == LogType.Log)
 					Debug.Log (log);
 				else if (logType == LogType.Error)

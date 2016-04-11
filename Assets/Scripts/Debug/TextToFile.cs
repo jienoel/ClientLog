@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class TextToFile
 {
-	public static  string FILE_PATH = @"..\Game\EffectsLog.txt";
+	public static  string FILE_PATH = @"..\Game\";
+	//public static  string FILE_PATH = @"..\Game\EffectsLog.txt";
 	public static  string FILE_PATH_Discrete = @"..\Game\EffectLog\EffectsLog";
 	private static string  timestamp = "";
 	public static string path = @"..\Game\EffectLog\EffectsLog1.txt";
@@ -14,13 +15,14 @@ public class TextToFile
 	public static string SpriteLogPath = Application.dataPath + "/../SpriteLog.txt";
 	public static StreamWriter sr = null;
 
-	public static void Reset (TextType debugLog = TextType.None)
+	public static void Reset (TextType debugLog = TextType.None, string fileName = "", bool colorful = false)
 	{
 #if UNITY_EDITOR
 		if (sr != null)
 			return;
-
+		Debug.Log ("3--->colorful:" + colorful);
 		if (debugLog == TextType.Continuours) {
+			FILE_PATH = Application.dataPath + "/../EffectsLog_" + fileName + (colorful ? ".rtf" : ".txt");
 			if (!File.Exists (FILE_PATH)) {
 				UnityEngine.Debug.Log (FILE_PATH);
 				sr = File.CreateText (FILE_PATH);
@@ -30,7 +32,7 @@ public class TextToFile
 		} else if (debugLog == TextType.Discrete) {
 			timestamp = System.DateTime.Now.Day.ToString () + "_" + System.DateTime.Now.Hour.ToString ()
 				+ "_" + System.DateTime.Now.Minute.ToString () + "_" + System.DateTime.Now.Second.ToString ();
-			path = Application.dataPath + "/../EffectLog/EffectsLog" + timestamp + ".txt";
+			path = Application.dataPath + "/../EffectLog/EffectsLog_" + fileName + timestamp + (colorful ? ".rtf" : ".txt");
 			string folderPath = Application.dataPath + "/../" + folderName;
 			if (!Directory.Exists (folderPath)) {
 				Directory.CreateDirectory (folderPath);
@@ -78,33 +80,6 @@ public class TextToFile
 		} else if (debugLog == TextType.Discrete) {
 			sr.WriteLine (text);
 		} 
-		if (debugLog == TextType.None) {
-		} else {
-//            if (!File.Exists (SERVER_LOG_PATH)) {
-//                UnityEngine.Debug.Log (SERVER_LOG_PATH);
-//                StreamWriter sw = File.CreateText (SERVER_LOG_PATH);
-//                sw.WriteLine (text);
-//                sw.Close (); 
-//            } else {
-//                using (StreamWriter sw = File.AppendText(SERVER_LOG_PATH)) {
-//                    sw.WriteLine (text);
-//                }
-//            }   
-		}
 #endif
-	}
-	
-	public static void WriteServerLogToFile (string text)
-	{
-		if (!File.Exists (SERVER_LOG_PATH)) {
-			UnityEngine.Debug.Log (SERVER_LOG_PATH);
-			StreamWriter sw = File.CreateText (SERVER_LOG_PATH);
-			sw.WriteLine (text);
-			sw.Close (); 
-		} else {
-			using (StreamWriter sw = File.AppendText(SERVER_LOG_PATH)) {
-				sw.WriteLine (text);
-			}
-		}   
 	}
 }
